@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import org.bson.Document;
+import org.json.JSONObject;
 
 import com.mongodb.MongoWriteException;
 import com.mongodb.client.MongoCollection;
@@ -71,7 +72,7 @@ public class SubjectHandler {
 		}
 		String[] command = temp.split(":");
 		Document d = new Document(command[0], command[1]);
-		collection.find(d).forEach(t -> System.out.println(t.toJson()));
+		collection.find(d).forEach(t -> System.out.println(new JSONObject(t.toJson()).toString(4)));
 
 	}
 
