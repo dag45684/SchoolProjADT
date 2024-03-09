@@ -22,4 +22,11 @@ public class Subject {
 		return d;
 	}
 
+	void structure() {
+		System.out.println("TEACHERS:");
+		System.out.println("\t - _id");
+		System.out.println("\t - name");
+		System.out.println("\t - hours");
+	}
+
 }

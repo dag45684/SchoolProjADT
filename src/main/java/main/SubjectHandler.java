@@ -1,5 +1,7 @@
 package main;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import org.bson.Document;
@@ -30,9 +32,33 @@ public class SubjectHandler {
 		Subject st = new Subject(id, name, hours);
 		try {
 			collection.insertOne(st.createDocument());
-		}catch (MongoWriteException e) {
+		} catch (MongoWriteException e) {
 			System.err.println("El ID especificado ya existe");
 		}
+	}
+
+	void insertSubject(int n) {
+		List<Document> subjects = new ArrayList<Document>();
+		for (int i = 0; i < n; i++) {
+			System.out.println("Insert subject id:");
+			String id = sc.nextLine();
+			while (!id.matches("SB\\d{3}")) {
+				System.err.println("EL ID no es valido, por favor manten un formato SB000");
+				id = sc.nextLine();
+			}
+			System.out.println("Insert subject name:");
+			String name = sc.nextLine();
+			System.out.println("Insert subject hours:");
+			int hours = sc.nextInt();
+			Subject st = new Subject(id, name, hours);
+			try {
+				collection.insertOne(st.createDocument());
+			} catch (MongoWriteException e) {
+				System.err.println("El ID especificado ya existe");
+			}
+		}
+		collection.insertMany(subjects);
+		sc.reset();
 	}
 
 	void selectSubject() {

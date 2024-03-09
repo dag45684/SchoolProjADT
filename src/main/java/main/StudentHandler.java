@@ -38,7 +38,6 @@ public class StudentHandler {
 			System.err.println("El ID especificado ya existe");
 		}
 		sc.reset();
-
 	}
 
 	void insertStudent(int n) {
@@ -61,7 +60,6 @@ public class StudentHandler {
 		}
 		collection.insertMany(students);
 		sc.reset();
-
 	}
 
 	void selectStudent() {
@@ -77,31 +75,6 @@ public class StudentHandler {
 		collection.find(d).forEach(t -> System.out.println(t.toJson()));
 		sc.reset();
 
-	}
-
-}
-
-class Student {
-	String idStudent;
-	String name;
-	String surname;
-	int age;
-	Subject[] subjects;
-
-	public Student(String idStudent, String name, String surname, int age) {
-		super();
-		this.idStudent = idStudent;
-		this.name = name;
-		this.surname = surname;
-		this.age = age;
-	}
-
-	Document createDocument() {
-		Document d = new Document("_id", idStudent);
-		d.put("name", name);
-		d.put("surname", surname);
-		d.put("age", age);
-		return d;
 	}
 
 }
