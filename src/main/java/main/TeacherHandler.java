@@ -5,10 +5,12 @@ import java.util.List;
 import java.util.Scanner;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.json.JSONObject;
 
 import com.mongodb.MongoWriteException;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Projections;
 
 public class TeacherHandler {
 	MongoCollection<Document> collection;
@@ -42,7 +44,6 @@ public class TeacherHandler {
 		} catch (MongoWriteException e) {
 			System.err.println("El ID especificado ya existe");
 		}
-		sc.reset();
 	}
 
 	void insertTeacher(int n) {
@@ -70,10 +71,8 @@ public class TeacherHandler {
 			} catch (MongoWriteException e) {
 				System.err.println("El ID especificado ya existe");
 			}
-			sc.reset();
 		}
 		collection.insertMany(teachers);
-		sc.reset();
 	}
 
 	void selectTeacher() {
@@ -87,8 +86,20 @@ public class TeacherHandler {
 		String[] command = temp.split(":");
 		Document d = new Document(command[0], command[1]);
 		collection.find(d).forEach(t -> System.out.println(new JSONObject(t.toJson()).toString(4)));
-		sc.reset();
 	}
 
+	void selectTeacher(String f) {
+		System.out.println("Para buscar un profesor, escribe el campo sobre el que buscas y el"
+				+ " valor del campo separados por ':'");
+		String temp = sc.nextLine();
+		while (!temp.matches(".\\w+:\\w+")) {
+			System.err.println("El formato no es el especificado");
+			temp = sc.nextLine();
+		}
+		String[] command = temp.split(":");
+		Document d = new Document(command[0], command[1]);
+		Bson proj = Projections.fields(Projections.include(f), Projections.excludeId());
+		collection.find(d).projection(proj).forEach(t -> System.out.println(new JSONObject(t.toJson()).toString(4)));
+	}
 }
 

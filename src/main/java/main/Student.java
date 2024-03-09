@@ -24,14 +24,4 @@ class Student {
 		return d;
 	}
 
-	void structure() {
-		System.out.println("TEACHERS:");
-		System.out.println("\t - _id");
-		System.out.println("\t - name");
-		System.out.println("\t - surname");
-		System.out.println("\t - age");
-		System.out.println("\t - subjects");
-	}
-
-
 }

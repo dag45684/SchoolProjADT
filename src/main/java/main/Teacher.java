@@ -29,16 +29,4 @@ class Teacher {
 		return d;
 	}
 	
-	void structure() {
-		System.out.println("TEACHERS:");
-		System.out.println("\t - _id");
-		System.out.println("\t - name");
-		System.out.println("\t - surname");
-		System.out.println("\t - age");
-		System.out.println("\t - salary");
-		System.out.println("\t - deptMgr");
-		System.out.println("\t - students");
-		System.out.println("\t - subjects");
-	}
-
 }

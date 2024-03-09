@@ -1,17 +1,9 @@
 package main;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
-
 import org.bson.Document;
-import org.json.JSONObject;
-
-import com.mongodb.ConnectionString;
 import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 
 public class Main {
@@ -55,6 +47,7 @@ public class Main {
 					sh.selectSubject();
 					break;
 				}
+				System.err.println("Comando incorrecto. Por favor, intentelo de nuevo.");
 				break;
 			case "new":
 				if (command.contains("--a")) {
@@ -84,9 +77,7 @@ public class Main {
 					sh.insertSubject();
 					break;
 				}
-				break;
-			case "assign":
-				MainMethods.assignStudent();
+				System.err.println("Comando incorrecto. Por favor, intentelo de nuevo.");
 				break;
 			case "add":
 				if (command.contains("--st")) {
@@ -97,26 +88,38 @@ public class Main {
 					MainMethods.insertSubjectIntoStudent();
 					break;
 				}
+				System.err.println("Comando incorrecto. Por favor, intentelo de nuevo.");
+				break;
+			case "sp":
+				if (command.contains("--a ")) {
+					command = command.substring(command.indexOf("--a ")+"--a ".length());
+					ah.selectStudent(command);
+					break;
+				}
+				if (command.contains("--t ")) {
+					command = command.substring(command.indexOf("--t ")+"--t ".length());
+					th.selectTeacher(command);
+					break;
+				}
+				if (command.contains("--s ")) {
+					command = command.substring(command.indexOf("--s ")+"--s ".length());
+					sh.selectSubject(command);
+					break;
+				}
+				System.err.println("Comando incorrecto. Por favor, intentelo de nuevo.");
+				break;
+			case "assign":
+				MainMethods.assignStudent();
+				break;
+			case "fields":
+				MainMethods.showFields();
 				break;
 			case "exit":
 				out = true;
 				break;
 			default:
 				System.out.println("Ese comando no se reconoce, intentelo de nuevo. Si necesita ayuda, escriba help para mostrarla\n");
-
 			}
-
 		}
-//		 TeachersHandler th = new TeachersHandler(db.getCollection("teachers"));
-//		 th.insertTeacher();
-//		 th.selectTeacher();
-
-//		 
-//		 SubjectHandler sh = new SubjectHandler(db.getCollection("subjects"));
-//		 sh.insertSubject();
-
-//		 sh.selectSubject();
-
 	}
-
 }

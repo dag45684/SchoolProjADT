@@ -5,10 +5,12 @@ import java.util.List;
 import java.util.Scanner;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.json.JSONObject;
 
 import com.mongodb.MongoWriteException;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Projections;
 
 public class SubjectHandler {
 	MongoCollection<Document> collection;
@@ -59,7 +61,6 @@ public class SubjectHandler {
 			}
 		}
 		collection.insertMany(subjects);
-		sc.reset();
 	}
 
 	void selectSubject() {
@@ -73,7 +74,19 @@ public class SubjectHandler {
 		String[] command = temp.split(":");
 		Document d = new Document(command[0], command[1]);
 		collection.find(d).forEach(t -> System.out.println(new JSONObject(t.toJson()).toString(4)));
-
 	}
 
+	void selectSubject(String f) {
+		System.out.println("Para buscar una asignatura, escribe el campo sobre el que buscas y el"
+				+ " valor del campo separados por ':'");
+		String temp = sc.nextLine();
+		while (!temp.matches(".\\w+:\\w+")) {
+			System.err.println("El formato no es el especificado");
+			temp = sc.nextLine();
+		}
+		String[] command = temp.split(":");
+		Document d = new Document(command[0], command[1]);
+		Bson proj = Projections.fields(Projections.include(f), Projections.excludeId());
+		collection.find(d).projection(proj).forEach(t -> System.out.println(new JSONObject(t.toJson()).toString(4)));
+	}
 }

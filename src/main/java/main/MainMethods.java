@@ -9,42 +9,6 @@ import com.mongodb.ConnectionString;
 import com.mongodb.client.MongoClients;
 
 public class MainMethods {
-	
-	public static void help() {
-		System.out.println();
-		System.out.println("\t You have the following options:");
-		System.out.println();
-		System.out.println("\t\t DATA MANIPULATION:");
-		System.out.println("\t\t\t - To add a new student, type: 'new --a'");
-		System.out.println("\t\t\t - To add a new teacher, type: 'new --t'");
-		System.out.println("\t\t\t - To add a new subject, type: 'new --s'");
-		System.out.println();
-		System.out.println("\t\t\t - To add multiple students, type: 'new --a --N' where N is the number you want to insert");
-		System.out.println("\t\t\t - To add multiple subjects, type: 'new --s --N' where N is the number you want to insert");
-		System.out.println();
-		System.out.println("\t\t\t - To assign students to a teacher, type: 'assign'");
-		System.out.println("\t\t\t - To assign subjects to a teacher, type: 'add --st'");
-		System.out.println("\t\t\t - To assign subjects to a student, type: 'add --sa'");
-		System.out.println();
-		System.out.println(" ------ ");
-		System.out.println();
-		System.out.println("\t\t DATA CONSULTING:");
-		System.out.println("\t\t\t - To consult available fields in each class, type: 'fields'");
-		System.out.println();
-		System.out.println("\t\t\t - To search by students, type: 'sel --a'");
-		System.out.println("\t\t\t - To search by teachers, type: 'sel --t'");
-		System.out.println("\t\t\t - To search by subjects, type: 'sel --s'");
-		System.out.println();
-		System.out.println("\t\t\t - To search specific fields of a student, type: 'sel --a --F' where F is the field you want.");
-		System.out.println("\t\t\t - To search specific fields of a teacher, type: 'sel --a --F' where F is the field you want.");
-		System.out.println("\t\t\t - To search specific fields of a subject, type: 'sel --a --F' where F is the field you want.");
-		System.out.println();
-		System.out.println("\t\t\t - To search for common subjects Teacher-Student, type: 'sel --rel-st'");
-		System.out.println("\t\t\t - To search for department manager roled teachers, type: 'sel --rel-mg'");
-		System.out.println();
-		System.out.println(" ------ ");
-		System.out.println();
-	}
 
 	public static void initialize() {
 		Main.mc = MongoClients.create(new ConnectionString("mongodb://localhost:27017"));
@@ -58,6 +22,69 @@ public class MainMethods {
 		Main.teachers = Main.db.getCollection("teachers");
 		Main.subjects = Main.db.getCollection("subjects");
 		Main.students = Main.db.getCollection("students");
+	}
+	
+	public static void help() {
+		System.out.println();
+		System.out.println("\t You have the following options:");
+		System.out.println();
+		System.out.println("\t\t DATA MANIPULATION:");
+		System.out.println();
+		System.out.println("\t\t\t - To add a new student, type: 'new --a'");
+		System.out.println("\t\t\t - To add a new teacher, type: 'new --t'");
+		System.out.println("\t\t\t - To add a new subject, type: 'new --s'");
+		System.out.println();
+		System.out.println("\t\t\t - To assign students to a teacher, type: 'assign'");
+		System.out.println("\t\t\t - To assign subjects to a teacher, type: 'add --st'");
+		System.out.println("\t\t\t - To assign subjects to a student, type: 'add --sa'");
+		System.out.println();
+		System.out.println("\t\t\t - To add multiple students, type: 'new --a --N' where N is the number you want to insert");
+		System.out.println("\t\t\t - To add multiple subjects, type: 'new --s --N' where N is the number you want to insert");
+		System.out.println();
+		System.out.println("\t\t\t ------ ");
+		System.out.println();
+		System.out.println("\t\t DATA CONSULTING:");
+		System.out.println();
+		System.out.println("\t\t\t - To consult available fields in each class, type: 'fields'");
+		System.out.println();
+		System.out.println("\t\t\t - To search by students, type: 'sel --a'");
+		System.out.println("\t\t\t - To search by teachers, type: 'sel --t'");
+		System.out.println("\t\t\t - To search by subjects, type: 'sel --s'");
+		System.out.println();
+		System.out.println("\t\t\t - To search for common subjects Teacher-Student, type: 'sel --rel-ts'");
+		System.out.println("\t\t\t - To search for department manager roled teachers, type: 'sel --rel-mg'");
+		System.out.println();
+		System.out.println("\t\t\t - To search specific fields of a student, type: 'sp --a --F' where F is the field you want.");
+		System.out.println("\t\t\t - To search specific fields of a teacher, type: 'sp --t --F' where F is the field you want.");
+		System.out.println("\t\t\t - To search specific fields of a subject, type: 'sp --s --F' where F is the field you want.");
+		System.out.println();
+		System.out.println("\t\t\t ------ ");
+		System.out.println();
+	}
+
+	public static void showFields() {
+		System.out.println("TEACHERS:");
+		System.out.println("\t - _id");
+		System.out.println("\t - name");
+		System.out.println("\t - surname");
+		System.out.println("\t - age");
+		System.out.println("\t - subjects");
+		System.out.println();
+		System.out.println("TEACHERS:");
+		System.out.println("\t - _id");
+		System.out.println("\t - name");
+		System.out.println("\t - surname");
+		System.out.println("\t - age");
+		System.out.println("\t - salary");
+		System.out.println("\t - deptMgr");
+		System.out.println("\t - students");
+		System.out.println("\t - subjects");
+		System.out.println();
+		System.out.println("TEACHERS:");
+		System.out.println("\t - _id");
+		System.out.println("\t - name");
+		System.out.println("\t - hours");
+		System.out.println();
 	}
 
 	public static void insertSubjectIntoTeacher() {
