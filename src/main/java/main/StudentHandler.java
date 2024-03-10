@@ -76,6 +76,7 @@ public class StudentHandler {
 		collection.find(d).forEach(t -> System.out.println(new JSONObject(t.toJson()).toString(4)));
 	}
 
+		// TODO: Comprobar que filtre correctamente
 	void selectStudent(String f) {
 		System.out.println("Para buscar un alumno, escribe el campo sobre el que buscas y el"
 				+ " valor del campo separados por ':'");

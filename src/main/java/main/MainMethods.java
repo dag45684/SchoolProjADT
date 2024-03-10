@@ -1,12 +1,15 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.client.MongoClients;
+import com.mongodb.client.model.Projections;
 
 public class MainMethods {
 
@@ -52,7 +55,7 @@ public class MainMethods {
 		System.out.println("\t\t\t - To search by subjects, type: 'sel --s'");
 		System.out.println();
 		System.out.println("\t\t\t - To search for common subjects Teacher-Student, type: 'sel --rel-ts'");
-		System.out.println("\t\t\t - To search for department manager roled teachers, type: 'sel --rel-mg'");
+		System.out.println("\t\t\t - To consult department manager roled teachers, type: 'sel --rel-mg'");
 		System.out.println();
 		System.out.println("\t\t\t - To search specific fields of a student, type: 'sp --a --F' where F is the field you want.");
 		System.out.println("\t\t\t - To search specific fields of a teacher, type: 'sp --t --F' where F is the field you want.");
@@ -87,6 +90,7 @@ public class MainMethods {
 		System.out.println();
 	}
 
+		// TODO: Comprobar que funcione
 	public static void insertSubjectIntoTeacher() {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Para buscar un profesor, escribe el campo sobre el que buscas y el valor del campo separados por ':'");
@@ -100,7 +104,6 @@ public class MainMethods {
 
 		System.out.println("Introduce el id de las asignaturas que quieras añadir, separadas por ','");
 		temp = sc.nextLine();
-		// TODO: Comprobar que funcione
 		while (!temp.matches("^(SB\\d{3})(,(SB\\d{3}))*$")) {
 			System.err.println("El formato no es el especificado");
 			temp = sc.nextLine();
@@ -122,6 +125,7 @@ public class MainMethods {
 		sc.close();
 	}
 	
+		// TODO: Comprobar que funcione
 	public static void insertSubjectIntoStudent() {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Para buscar un estudiante, escribe el campo sobre el que buscas y el valor del campo separados por ':'");
@@ -157,6 +161,7 @@ public class MainMethods {
 		sc.close();
 	}
 	
+		// TODO: Comprobar que funcione
 	public static void assignStudent() {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Para buscar un profesor, escribe el campo sobre el que buscas y el valor del campo separados por ':'");
@@ -192,5 +197,33 @@ public class MainMethods {
 		sc.close();
 	}
 	
+	public static void findCommonSubjects() {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Para buscar un profesor, escribe el campo sobre el que buscas y el"
+				+ " valor del campo separados por ':'");
+		String temp = sc.nextLine();
+		while (!temp.matches(".\\w+:\\w+")) {
+			System.err.println("El formato no es el especificado");
+			temp = sc.nextLine();
+		}
+		String[] command = temp.split(":");
+		Document tea = new Document(command[0], command[1]);
+
+		System.out.println("Para buscar un alumno, escribe el campo sobre el que buscas y el"
+				+ " valor del campo separados por ':'");
+		temp = sc.nextLine();
+		while (!temp.matches(".\\w+:\\w+")) {
+			System.err.println("El formato no es el especificado");
+			temp = sc.nextLine();
+		}
+		command = temp.split(":");
+		Document stu = new Document(command[0], command[1]);
+
+		// TODO: Comprobar que funcione
+		Bson proj = Projections.fields(Projections.include("subjects"), Projections.excludeId());
+		ArrayList<String> sub = new ArrayList<>();
+		Main.th.collection.find(tea).projection(proj).forEach(e -> Arrays.asList(e.get("subjects")).forEach(t -> sub.add((String) t)));
+		Main.ah.collection.find(stu).projection(proj).forEach(e -> { if(sub.contains(e)) System.out.println(e); });
+	}
 
 }

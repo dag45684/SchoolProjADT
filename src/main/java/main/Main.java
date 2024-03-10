@@ -24,6 +24,7 @@ public class Main {
 		String command;
 		Scanner scanner = new Scanner(System.in);
 
+		// TODO: Comprobar que todo esta bien definido (deberia)
 		while (!out) {
 			System.out.println("SCHOOL PERSONNEL AND STUDENT MANAGEMENT:");
 			System.out.println("Escriba 'help' para mostrar la ayuda o 'exit' para cerrar la aplicacion.");
@@ -45,6 +46,14 @@ public class Main {
 				}
 				if (command.contains("--s")) {
 					sh.selectSubject();
+					break;
+				}
+				if (command.contains("--rel-ts")) {
+					MainMethods.findCommonSubjects();
+					break;
+				}
+				if (command.contains("--rel-mg")) {
+					th.selectManagers();
 					break;
 				}
 				System.err.println("Comando incorrecto. Por favor, intentelo de nuevo.");
@@ -121,5 +130,7 @@ public class Main {
 				System.out.println("Ese comando no se reconoce, intentelo de nuevo. Si necesita ayuda, escriba help para mostrarla\n");
 			}
 		}
+		scanner.close();
+		System.exit(0);
 	}
 }

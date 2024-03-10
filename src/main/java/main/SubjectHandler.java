@@ -54,11 +54,7 @@ public class SubjectHandler {
 			System.out.println("Insert subject hours:");
 			int hours = sc.nextInt();
 			Subject st = new Subject(id, name, hours);
-			try {
-				collection.insertOne(st.createDocument());
-			} catch (MongoWriteException e) {
-				System.err.println("El ID especificado ya existe");
-			}
+			subjects.add(st.createDocument());
 		}
 		collection.insertMany(subjects);
 	}
@@ -76,6 +72,7 @@ public class SubjectHandler {
 		collection.find(d).forEach(t -> System.out.println(new JSONObject(t.toJson()).toString(4)));
 	}
 
+		// TODO: Comprobar que filtre correctamente
 	void selectSubject(String f) {
 		System.out.println("Para buscar una asignatura, escribe el campo sobre el que buscas y el"
 				+ " valor del campo separados por ':'");
