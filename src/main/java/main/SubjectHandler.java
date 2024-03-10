@@ -1,7 +1,5 @@
 package main;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 import org.bson.Document;
@@ -25,7 +23,7 @@ public class SubjectHandler {
 		System.out.println("Insert subject id:");
 		String id = sc.nextLine();
 		while (!id.matches("SB\\d{3}")) {
-			System.err.println("EL ID no es valido, por favor manten un formato SB000");
+			System.err.println("Not valid ID, format should be: SB000");
 			id = sc.nextLine();
 		}
 		System.out.println("Insert subject name:");
@@ -36,35 +34,40 @@ public class SubjectHandler {
 		try {
 			collection.insertOne(st.createDocument());
 		} catch (MongoWriteException e) {
-			System.err.println("El ID especificado ya existe");
+			System.err.println("A subject with id:" + id + " already exists.");
 		}
 	}
 
 	void insertSubject(int n) {
-		List<Document> subjects = new ArrayList<Document>();
+//		List<Document> subjects = new ArrayList<Document>();
+//		for (int i = 0; i < n; i++) {
+//			System.out.println("Insert subject id:");
+//			String id = sc.nextLine();
+//			while (!id.matches("SB\\d{3}")) {
+//				System.err.println("Not valid ID, format should be: SB000");
+//				id = sc.nextLine();
+//			}
+//			System.out.println("Insert subject name:");
+//			String name = sc.nextLine();
+//			System.out.println("Insert subject hours:");
+//			int hours = sc.nextInt();
+//			Subject st = new Subject(id, name, hours);
+//			subjects.add(st.createDocument());
+//		}
+//		collection.insertMany(subjects);
+		
+		// Same issue as StudentHandler, error catching > efficiency.
 		for (int i = 0; i < n; i++) {
-			System.out.println("Insert subject id:");
-			String id = sc.nextLine();
-			while (!id.matches("SB\\d{3}")) {
-				System.err.println("EL ID no es valido, por favor manten un formato SB000");
-				id = sc.nextLine();
-			}
-			System.out.println("Insert subject name:");
-			String name = sc.nextLine();
-			System.out.println("Insert subject hours:");
-			int hours = sc.nextInt();
-			Subject st = new Subject(id, name, hours);
-			subjects.add(st.createDocument());
+			insertSubject();
 		}
-		collection.insertMany(subjects);
+
 	}
 
 	void selectSubject() {
-		System.out.println("Para buscar una asignatura, escribe el campo sobre el que buscas y el"
-				+ " valor del campo separados por ':'");
+		System.out.println("To search for a subject, write the field you are looking for and its value separated by ':'");
 		String temp = sc.nextLine();
 		while (!temp.matches(".\\w+:\\w+")) {
-			System.err.println("El formato no es el especificado");
+			System.err.println("Wrong format.");
 			temp = sc.nextLine();
 		}
 		String[] command = temp.split(":");
@@ -74,11 +77,10 @@ public class SubjectHandler {
 
 		// TODO: Comprobar que filtre correctamente
 	void selectSubject(String f) {
-		System.out.println("Para buscar una asignatura, escribe el campo sobre el que buscas y el"
-				+ " valor del campo separados por ':'");
+		System.out.println("To search for a subject, write the field you are looking for and its value separated by ':'");
 		String temp = sc.nextLine();
 		while (!temp.matches(".\\w+:\\w+")) {
-			System.err.println("El formato no es el especificado");
+			System.err.println("Wrong format");
 			temp = sc.nextLine();
 		}
 		String[] command = temp.split(":");

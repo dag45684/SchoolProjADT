@@ -1,7 +1,5 @@
 package main;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 import org.bson.Document;
@@ -26,7 +24,7 @@ public class TeacherHandler {
 		System.out.println("Insert teacher id:");
 		String id = sc.nextLine();
 		while (!id.matches("TE\\d{3}")) {
-			System.err.println("EL ID no es valido, por favor manten un formato TE000");
+			System.err.println("Not valid ID, format should be: TE000");
 			id = sc.nextLine();
 		}
 		System.out.println("Insert teacher name:");
@@ -43,41 +41,46 @@ public class TeacherHandler {
 		try {
 			collection.insertOne(st.createDocument());
 		} catch (MongoWriteException e) {
-			System.err.println("El ID especificado ya existe");
+			System.err.println("A teacher with id:" + id + " already exists.");
 		}
 	}
 
 	void insertTeacher(int n) {
-		List<Document> teachers = new ArrayList<Document>();
+//		List<Document> teachers = new ArrayList<Document>();
+//		for (int i = 0; i < n; i++) {
+//			System.out.println("Insert teacher id:");
+//			String id = sc.nextLine();
+//			while (!id.matches("TE\\d{3}")) {
+//				System.err.println("Not valid ID, format should be: TE000");
+//				id = sc.nextLine();
+//			}
+//			System.out.println("Insert teacher name:");
+//			String name = sc.nextLine();
+//			System.out.println("Insert teacher surname:");
+//			String surname = sc.nextLine();
+//			System.out.println("Insert teacher age:");
+//			int age = sc.nextInt();
+//			System.out.println("Insert teacher salary:");
+//			float salary = sc.nextFloat();
+//			System.out.println("Insert teacher deptMgr (boolean):");
+//			boolean deptMgr = sc.nextBoolean();
+//			Teacher st = new Teacher(id, name, surname, age, salary, deptMgr);
+//			teachers.add(st.createDocument());
+//		}
+//		collection.insertMany(teachers);
+		
+		// Same as StudentHandler, error catching > efficiency.
 		for (int i = 0; i < n; i++) {
-			System.out.println("Insert teacher id:");
-			String id = sc.nextLine();
-			while (!id.matches("TE\\d{3}")) {
-				System.err.println("EL ID no es valido, por favor manten un formato TE000");
-				id = sc.nextLine();
-			}
-			System.out.println("Insert teacher name:");
-			String name = sc.nextLine();
-			System.out.println("Insert teacher surname:");
-			String surname = sc.nextLine();
-			System.out.println("Insert teacher age:");
-			int age = sc.nextInt();
-			System.out.println("Insert teacher salary:");
-			float salary = sc.nextFloat();
-			System.out.println("Insert teacher deptMgr (boolean):");
-			boolean deptMgr = sc.nextBoolean();
-			Teacher st = new Teacher(id, name, surname, age, salary, deptMgr);
-			teachers.add(st.createDocument());
+			insertTeacher();
 		}
-		collection.insertMany(teachers);
+
 	}
 
 	void selectTeacher() {
-		System.out.println("Para buscar un profesor, escribe el campo sobre el que buscas y el"
-				+ " valor del campo separados por ':'");
+		System.out.println("To search for a teacher, write the field you are looking for and its value separated by ':'");
 		String temp = sc.nextLine();
 		while (!temp.matches(".\\w+:\\w+")) {
-			System.err.println("El formato no es el especificado");
+			System.err.println("Wrong format");
 			temp = sc.nextLine();
 		}
 		String[] command = temp.split(":");
@@ -87,11 +90,10 @@ public class TeacherHandler {
 
 		// TODO: Comprobar que filtre correctamente
 	void selectTeacher(String f) {
-		System.out.println("Para buscar un profesor, escribe el campo sobre el que buscas y el"
-				+ " valor del campo separados por ':'");
+		System.out.println("To search for a teacher, write the field you are looking for and its value separated by ':'");
 		String temp = sc.nextLine();
 		while (!temp.matches(".\\w+:\\w+")) {
-			System.err.println("El formato no es el especificado");
+			System.err.println("Wrong format");
 			temp = sc.nextLine();
 		}
 		String[] command = temp.split(":");

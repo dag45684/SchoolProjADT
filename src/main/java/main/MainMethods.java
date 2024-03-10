@@ -93,19 +93,19 @@ public class MainMethods {
 		// TODO: Comprobar que funcione
 	public static void insertSubjectIntoTeacher() {
 		Scanner sc = new Scanner(System.in);
-		System.out.println("Para buscar un profesor, escribe el campo sobre el que buscas y el valor del campo separados por ':'");
+		System.out.println("To search for a teacher, write the field you are looking for and its value separated by ':'");
 		String temp = sc.nextLine();
 		while (!temp.matches(".\\w+:\\w+")) {
-			System.err.println("El formato no es el especificado");
+			System.err.println("Wrong format");
 			temp = sc.nextLine();
 		}
 		String[] command = temp.split(":");
 		Document filtro = new Document(command[0], command[1]);
 
-		System.out.println("Introduce el id de las asignaturas que quieras añadir, separadas por ','");
+		System.out.println("Introduce the subject ids you want to add, separated by ','");
 		temp = sc.nextLine();
 		while (!temp.matches("^(SB\\d{3})(,(SB\\d{3}))*$")) {
-			System.err.println("El formato no es el especificado");
+			System.err.println("Wrong format");
 			temp = sc.nextLine();
 		}
 
@@ -128,20 +128,20 @@ public class MainMethods {
 		// TODO: Comprobar que funcione
 	public static void insertSubjectIntoStudent() {
 		Scanner sc = new Scanner(System.in);
-		System.out.println("Para buscar un estudiante, escribe el campo sobre el que buscas y el valor del campo separados por ':'");
+		System.out.println("To search for a student, write the field you are looking for and its value separated by ':'");
 		String temp = sc.nextLine();
 		while (!temp.matches(".\\w+:\\w+")) {
-			System.err.println("El formato no es el especificado");
+			System.err.println("Wrong format");
 			temp = sc.nextLine();
 		}
 		String[] command = temp.split(":");
 		Document filtro = new Document(command[0], command[1]);
 
-		System.out.println("Introduce el id de las asignaturas que quieras añadir, separadas por ','");
+		System.out.println("Introduce the subject ids you want to add, separated by ','");
 		temp = sc.nextLine();
 		// TODO: Comprobar que funcione
 		while (!temp.matches("^(SB\\d{3})(,(SB\\d{3}))*$")) {
-			System.err.println("El formato no es el especificado");
+			System.err.println("Wrong format");
 			temp = sc.nextLine();
 		}
 
@@ -164,20 +164,19 @@ public class MainMethods {
 		// TODO: Comprobar que funcione
 	public static void assignStudent() {
 		Scanner sc = new Scanner(System.in);
-		System.out.println("Para buscar un profesor, escribe el campo sobre el que buscas y el valor del campo separados por ':'");
+		System.out.println("To search for a teacher, write the field you are looking for and its value separated by ':'");
 		String temp = sc.nextLine();
 		while (!temp.matches(".\\w+:\\w+")) {
-			System.err.println("El formato no es el especificado");
+			System.err.println("Wrong format");
 			temp = sc.nextLine();
 		}
 		String[] command = temp.split(":");
 		Document filtro = new Document(command[0], command[1]);
-
-		System.out.println("Introduce el id de los alumnos que quieras asignarle al profesor, separadas por ','");
+		System.out.println("Introduce the student ids you want to add to the teacher, separated by ','");
 		temp = sc.nextLine();
 		// TODO: Comprobar que funcione
 		while (!temp.matches("^(ST\\d{3})(,(ST\\d{3}))*$")) {
-			System.err.println("El formato no es el especificado");
+			System.err.println("Wrong format");
 			temp = sc.nextLine();
 		}
 
@@ -199,21 +198,18 @@ public class MainMethods {
 	
 	public static void findCommonSubjects() {
 		Scanner sc = new Scanner(System.in);
-		System.out.println("Para buscar un profesor, escribe el campo sobre el que buscas y el"
-				+ " valor del campo separados por ':'");
+		System.out.println("To search for a teacher, write the field you are looking for and its value separated by ':'");
 		String temp = sc.nextLine();
 		while (!temp.matches(".\\w+:\\w+")) {
-			System.err.println("El formato no es el especificado");
+			System.err.println("Wrong format");
 			temp = sc.nextLine();
 		}
 		String[] command = temp.split(":");
 		Document tea = new Document(command[0], command[1]);
-
-		System.out.println("Para buscar un alumno, escribe el campo sobre el que buscas y el"
-				+ " valor del campo separados por ':'");
+		System.out.println("To search for a student, write the field you are looking for and its value separated by ':'");
 		temp = sc.nextLine();
 		while (!temp.matches(".\\w+:\\w+")) {
-			System.err.println("El formato no es el especificado");
+			System.err.println("Wrong format");
 			temp = sc.nextLine();
 		}
 		command = temp.split(":");
@@ -224,6 +220,7 @@ public class MainMethods {
 		ArrayList<String> sub = new ArrayList<>();
 		Main.th.collection.find(tea).projection(proj).forEach(e -> Arrays.asList(e.get("subjects")).forEach(t -> sub.add((String) t)));
 		Main.ah.collection.find(stu).projection(proj).forEach(e -> { if(sub.contains(e)) System.out.println(e); });
+		sc.close();
 	}
 
 }

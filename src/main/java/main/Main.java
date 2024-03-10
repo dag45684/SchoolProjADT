@@ -1,7 +1,9 @@
 package main;
 
 import java.util.Scanner;
+
 import org.bson.Document;
+
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -27,7 +29,7 @@ public class Main {
 		// TODO: Comprobar que todo esta bien definido (deberia)
 		while (!out) {
 			System.out.println("SCHOOL PERSONNEL AND STUDENT MANAGEMENT:");
-			System.out.println("Escriba 'help' para mostrar la ayuda o 'exit' para cerrar la aplicacion.");
+			System.out.println("Write 'help' if needed or 'exit' to close the application.");
 			System.out.print(">");
 			command = scanner.nextLine();
 
@@ -56,7 +58,7 @@ public class Main {
 					th.selectManagers();
 					break;
 				}
-				System.err.println("Comando incorrecto. Por favor, intentelo de nuevo.");
+				System.err.println("Wrong command. Please, try again.");
 				break;
 			case "new":
 				if (command.contains("--a")) {
@@ -86,7 +88,7 @@ public class Main {
 					sh.insertSubject();
 					break;
 				}
-				System.err.println("Comando incorrecto. Por favor, intentelo de nuevo.");
+				System.err.println("Wrong command. Please, try again.");
 				break;
 			case "add":
 				if (command.contains("--st")) {
@@ -97,7 +99,7 @@ public class Main {
 					MainMethods.insertSubjectIntoStudent();
 					break;
 				}
-				System.err.println("Comando incorrecto. Por favor, intentelo de nuevo.");
+				System.err.println("Wrong command. Please, try again.");
 				break;
 			case "sp":
 				if (command.contains("--a ")) {
@@ -115,7 +117,7 @@ public class Main {
 					sh.selectSubject(command);
 					break;
 				}
-				System.err.println("Comando incorrecto. Por favor, intentelo de nuevo.");
+				System.err.println("Wrong command. Please, try again.");
 				break;
 			case "assign":
 				MainMethods.assignStudent();
@@ -127,7 +129,7 @@ public class Main {
 				out = true;
 				break;
 			default:
-				System.out.println("Ese comando no se reconoce, intentelo de nuevo. Si necesita ayuda, escriba help para mostrarla\n");
+				System.err.println("Unknown command, try again. If help is needed, write help to show.\n");
 			}
 		}
 		scanner.close();

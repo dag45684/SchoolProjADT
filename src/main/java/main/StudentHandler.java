@@ -1,7 +1,5 @@
 package main;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 import org.bson.Document;
@@ -25,7 +23,7 @@ public class StudentHandler {
 		System.out.println("Insert student id:");
 		String id = sc.nextLine();
 		while (!id.matches("ST\\d{3}")) {
-			System.err.println("EL ID no es valido, por favor manten un formato ST000");
+			System.err.println("Not valid ID, format should be: ST000");
 			id = sc.nextLine();
 		}
 		System.out.println("Insert students name:");
@@ -38,37 +36,45 @@ public class StudentHandler {
 		try {
 			collection.insertOne(st.createDocument());
 		}catch (MongoWriteException e) {
-			System.err.println("El ID especificado ya existe");
+			System.err.println("A student with id:" + id + " already exists.");
 		}
 	}
 
 	void insertStudent(int n) {
-		List<Document> students = new ArrayList<Document>();
+		// We thought about using a loop with the non parameters insertStudent
+		// but after all is way more efficient to use one insertMany
+		// instead of multiple insertOne.
+//		List<Document> students = new ArrayList<Document>();
+//		for (int i = 0; i < n; i++) {
+//			System.out.println("Insert student id:");
+//			String id = sc.nextLine();
+//			while (!id.matches("ST\\n{3}")) {
+//				System.err.println("Not valid ID, format should be: ST000");
+//				id = sc.nextLine();
+//			}
+//			System.out.println("Insert students name:");
+//			String name = sc.nextLine();
+//			System.out.println("Insert students surname:");
+//			String surname = sc.nextLine();
+//			System.out.println("Insert students age:");
+//			int age = sc.nextInt();
+//			Student st = new Student(id, name, surname, age);
+//			students.add(st.createDocument());
+//		}
+//		collection.insertMany(students);
+		
+		// After a few tries, we decided to use this, sacrificing efficiency just to 
+		// catch the error if one id already exists in the collection.
 		for (int i = 0; i < n; i++) {
-			System.out.println("Insert student id:");
-			String id = sc.nextLine();
-			while (!id.matches("ST\\n{3}")) {
-				System.err.println("EL ID no es valido, por favor manten un formato ST000");
-				id = sc.nextLine();
-			}
-			System.out.println("Insert students name:");
-			String name = sc.nextLine();
-			System.out.println("Insert students surname:");
-			String surname = sc.nextLine();
-			System.out.println("Insert students age:");
-			int age = sc.nextInt();
-			Student st = new Student(id, name, surname, age);
-			students.add(st.createDocument());
+			insertStudent();
 		}
-		collection.insertMany(students);
 	}
 
 	void selectStudent() {
-		System.out.println("Para buscar un alumno, escribe el campo sobre el que buscas y el"
-				+ " valor del campo separados por ':'");
+		System.out.println("To search for a student, write the field you are looking for and its value separated by ':'");
 		String temp = sc.nextLine();
 		while (!temp.matches(".\\w+:\\w+")) {
-			System.err.println("El formato no es el especificado");
+			System.err.println("Wrong format");
 			temp = sc.nextLine();
 		}
 		String[] command = temp.split(":");
@@ -78,11 +84,10 @@ public class StudentHandler {
 
 		// TODO: Comprobar que filtre correctamente
 	void selectStudent(String f) {
-		System.out.println("Para buscar un alumno, escribe el campo sobre el que buscas y el"
-				+ " valor del campo separados por ':'");
+		System.out.println("To search for a student, write the field you are looking for and its value separated by ':'");
 		String temp = sc.nextLine();
 		while (!temp.matches(".\\w+:\\w+")) {
-			System.err.println("El formato no es el especificado");
+			System.err.println("Wrong format");
 			temp = sc.nextLine();
 		}
 		String[] command = temp.split(":");
