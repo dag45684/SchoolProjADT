@@ -29,6 +29,7 @@ public class MainMethods {
 	
 	public static void help() {
 		System.out.println();
+		System.err.println("ME CAGO EN LA PUTA");
 		System.out.println("\t You have the following options:");
 		System.out.println();
 		System.out.println("\t\t DATA MANIPULATION:");
@@ -36,6 +37,10 @@ public class MainMethods {
 		System.out.println("\t\t\t - To add a new student, type: 'new --a'");
 		System.out.println("\t\t\t - To add a new teacher, type: 'new --t'");
 		System.out.println("\t\t\t - To add a new subject, type: 'new --s'");
+		System.out.println();
+		System.out.println("\t\t\t - To update a student, type: 'update --a'");
+		System.out.println("\t\t\t - To update a teacher, type: 'update --t'");
+		System.out.println("\t\t\t - To update a subject, type: 'update --s'");
 		System.out.println();
 		System.out.println("\t\t\t - To assign students to a teacher, type: 'assign'");
 		System.out.println("\t\t\t - To assign subjects to a teacher, type: 'add --st'");

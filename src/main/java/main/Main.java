@@ -119,6 +119,20 @@ public class Main {
 				}
 				System.err.println("Wrong command. Please, try again.");
 				break;
+			case "update":
+				if (command.contains("--a ")) {
+					ah.updateStudent();
+					break;
+				}
+				if (command.contains("--t ")) {
+					th.updateTeacher();
+					break;
+				}
+				if (command.contains("--s ")) {
+					sh.updateSubject();
+					break;
+				}
+				break;
 			case "assign":
 				MainMethods.assignStudent();
 				break;

@@ -35,7 +35,7 @@ public class StudentHandler {
 		Student st = new Student(id, name, surname, age);
 		try {
 			collection.insertOne(st.createDocument());
-		}catch (MongoWriteException e) {
+		} catch (MongoWriteException e) {
 			System.err.println("A student with id:" + id + " already exists.");
 		}
 	}
@@ -62,8 +62,8 @@ public class StudentHandler {
 //			students.add(st.createDocument());
 //		}
 //		collection.insertMany(students);
-		
-		// After a few tries, we decided to use this, sacrificing efficiency just to 
+
+		// After a few tries, we decided to use this, sacrificing efficiency just to
 		// catch the error if one id already exists in the collection.
 		for (int i = 0; i < n; i++) {
 			insertStudent();
@@ -71,7 +71,8 @@ public class StudentHandler {
 	}
 
 	void selectStudent() {
-		System.out.println("To search for a student, write the field you are looking for and its value separated by ':'");
+		System.out
+				.println("To search for a student, write the field you are looking for and its value separated by ':'");
 		String temp = sc.nextLine();
 		while (!temp.matches(".\\w+:\\w+")) {
 			System.err.println("Wrong format");
@@ -82,9 +83,10 @@ public class StudentHandler {
 		collection.find(d).forEach(t -> System.out.println(new JSONObject(t.toJson()).toString(4)));
 	}
 
-		// TODO: Comprobar que filtre correctamente
+	// TODO: Comprobar que filtre correctamente
 	void selectStudent(String f) {
-		System.out.println("To search for a student, write the field you are looking for and its value separated by ':'");
+		System.out
+				.println("To search for a student, write the field you are looking for and its value separated by ':'");
 		String temp = sc.nextLine();
 		while (!temp.matches(".\\w+:\\w+")) {
 			System.err.println("Wrong format");
@@ -94,5 +96,34 @@ public class StudentHandler {
 		Document d = new Document(command[0], command[1]);
 		Bson proj = Projections.fields(Projections.include(f), Projections.excludeId());
 		collection.find(d).projection(proj).forEach(t -> System.out.println(new JSONObject(t.toJson()).toString(4)));
+	}
+
+	void updateStudent() {
+		System.out
+				.println("To search for a student, write the field you are looking for and its value separated by ':'");
+		String temp = sc.nextLine();
+		while (!temp.matches(".\\w+:\\w+")) {
+			System.err.println("Wrong format");
+			temp = sc.nextLine();
+		}
+		String[] command = temp.split(":");
+		Document existing = new Document();
+		existing.put(command[0], command[1]);
+		System.out.println("Using the same format, write the field you want to update and its value separated by ':'");
+		temp = sc.nextLine();
+		while (!temp.matches(".\\w+:\\w+")) {
+			System.err.println("Wrong format");
+			temp = sc.nextLine();
+		}
+		command = temp.split(":");
+		Document newD = new Document();
+		newD.put(command[0], command[1]);
+		Document updateQuery = new Document();
+		updateQuery.put("$set", newD);
+		try {
+			collection.updateOne(existing, updateQuery);
+		} catch (MongoWriteException e) {
+			System.err.println("That student doesn't exists.");
+		}
 	}
 }
