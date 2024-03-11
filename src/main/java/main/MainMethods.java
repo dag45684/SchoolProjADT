@@ -107,22 +107,21 @@ public class MainMethods {
 
 	// TODO: Comprobar que funcione
 	public static void insertSubjectIntoTeacher() {
-		Scanner sc = new Scanner(System.in);
 		System.out
 				.println("To search for a teacher, write the field you are looking for and its value separated by ':'");
-		String temp = sc.nextLine();
+		String temp = Main.scanner.nextLine();
 		while (!temp.matches(".\\w+:\\w+")) {
 			System.err.println("Wrong format");
-			temp = sc.nextLine();
+			temp = Main.scanner.nextLine();
 		}
 		String[] command = temp.split(":");
 		Document filtro = new Document(command[0], command[1]);
 
 		System.out.println("Introduce the subject ids you want to add, separated by ','");
-		temp = sc.nextLine();
+		temp = Main.scanner.nextLine();
 		while (!temp.matches("^(SB\\d{3})(,(SB\\d{3}))*$")) {
 			System.err.println("Wrong format");
-			temp = sc.nextLine();
+			temp = Main.scanner.nextLine();
 		}
 
 		ArrayList<String> subs = new ArrayList<>();
@@ -139,28 +138,25 @@ public class MainMethods {
 		subs.removeAll(rm);
 		subs.forEach(e -> Main.subjects.find(new Document("_id", e))
 				.forEach(t -> Main.teachers.updateOne(filtro, new Document("$push", new Document("subjects", e)))));
-		sc.close();
 	}
 
 	// TODO: Comprobar que funcione
 	public static void insertSubjectIntoStudent() {
-		Scanner sc = new Scanner(System.in);
 		System.out
 				.println("To search for a student, write the field you are looking for and its value separated by ':'");
-		String temp = sc.nextLine();
+		String temp = Main.scanner.nextLine();
 		while (!temp.matches(".\\w+:\\w+")) {
 			System.err.println("Wrong format");
-			temp = sc.nextLine();
+			temp = Main.scanner.nextLine();
 		}
 		String[] command = temp.split(":");
 		Document filtro = new Document(command[0], command[1]);
 
 		System.out.println("Introduce the subject ids you want to add, separated by ','");
-		temp = sc.nextLine();
-		// TODO: Comprobar que funcione
+		temp = Main.scanner.nextLine();
 		while (!temp.matches("^(SB\\d{3})(,(SB\\d{3}))*$")) {
 			System.err.println("Wrong format");
-			temp = sc.nextLine();
+			temp = Main.scanner.nextLine();
 		}
 
 		ArrayList<String> subs = new ArrayList<>();
@@ -177,27 +173,25 @@ public class MainMethods {
 		subs.removeAll(rm);
 		subs.forEach(e -> Main.subjects.find(new Document("_id", e))
 				.forEach(t -> Main.students.updateOne(filtro, new Document("$push", new Document("subjects", e)))));
-		sc.close();
 	}
 
 	// TODO: Comprobar que funcione
 	public static void assignStudent() {
-		Scanner sc = new Scanner(System.in);
 		System.out
 				.println("To search for a teacher, write the field you are looking for and its value separated by ':'");
-		String temp = sc.nextLine();
+		String temp = Main.scanner.nextLine();
 		while (!temp.matches(".\\w+:\\w+")) {
 			System.err.println("Wrong format");
-			temp = sc.nextLine();
+			temp = Main.scanner.nextLine();
 		}
 		String[] command = temp.split(":");
 		Document filtro = new Document(command[0], command[1]);
 		System.out.println("Introduce the student ids you want to add to the teacher, separated by ','");
-		temp = sc.nextLine();
+		temp = Main.scanner.nextLine();
 		// TODO: Comprobar que funcione
 		while (!temp.matches("^(ST\\d{3})(,(ST\\d{3}))*$")) {
 			System.err.println("Wrong format");
-			temp = sc.nextLine();
+			temp = Main.scanner.nextLine();
 		}
 
 		ArrayList<String> subs = new ArrayList<>();
@@ -214,27 +208,25 @@ public class MainMethods {
 		subs.removeAll(rm);
 		subs.forEach(e -> Main.students.find(new Document("_id", e))
 				.forEach(t -> Main.teachers.updateOne(filtro, new Document("$push", new Document("students", e)))));
-		sc.close();
 	}
 
 	@SuppressWarnings("unlikely-arg-type")
 	public static void findCommonSubjects() {
-		Scanner sc = new Scanner(System.in);
 		System.out
 				.println("To search for a teacher, write the field you are looking for and its value separated by ':'");
-		String temp = sc.nextLine();
+		String temp = Main.scanner.nextLine();
 		while (!temp.matches(".\\w+:\\w+")) {
 			System.err.println("Wrong format");
-			temp = sc.nextLine();
+			temp = Main.scanner.nextLine();
 		}
 		String[] command = temp.split(":");
 		Document tea = new Document(command[0], command[1]);
 		System.out
 				.println("To search for a student, write the field you are looking for and its value separated by ':'");
-		temp = sc.nextLine();
+		temp = Main.scanner.nextLine();
 		while (!temp.matches(".\\w+:\\w+")) {
 			System.err.println("Wrong format");
-			temp = sc.nextLine();
+			temp = Main.scanner.nextLine();
 		}
 		command = temp.split(":");
 		Document stu = new Document(command[0], command[1]);
@@ -248,7 +240,6 @@ public class MainMethods {
 			if (sub.contains(e))
 				System.out.println(e);
 		});
-		sc.close();
 	}
 
 	public static void select(String collectionName) {
@@ -378,7 +369,5 @@ public class MainMethods {
 
 			}
 		}
-
 	}
-
 }
