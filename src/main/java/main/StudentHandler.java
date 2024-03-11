@@ -70,19 +70,6 @@ public class StudentHandler {
 		}
 	}
 
-	void selectStudent() {
-		System.out
-				.println("To search for a student, write the field you are looking for and its value separated by ':'");
-		String temp = sc.nextLine();
-		while (!temp.matches(".\\w+:\\w+")) {
-			System.err.println("Wrong format");
-			temp = sc.nextLine();
-		}
-		String[] command = temp.split(":");
-		Document d = new Document(command[0], command[1]);
-		collection.find(d).forEach(t -> System.out.println(new JSONObject(t.toJson()).toString(4)));
-	}
-
 	// TODO: Comprobar que filtre correctamente
 	void selectStudent(String f) {
 		System.out
@@ -93,37 +80,19 @@ public class StudentHandler {
 			temp = sc.nextLine();
 		}
 		String[] command = temp.split(":");
-		Document d = new Document(command[0], command[1]);
-		Bson proj = Projections.fields(Projections.include(f), Projections.excludeId());
-		collection.find(d).projection(proj).forEach(t -> System.out.println(new JSONObject(t.toJson()).toString(4)));
-	}
-
-	void updateStudent() {
-		System.out
-				.println("To search for a student, write the field you are looking for and its value separated by ':'");
-		String temp = sc.nextLine();
-		while (!temp.matches(".\\w+:\\w+")) {
-			System.err.println("Wrong format");
-			temp = sc.nextLine();
-		}
-		String[] command = temp.split(":");
-		Document existing = new Document();
-		existing.put(command[0], command[1]);
-		System.out.println("Using the same format, write the field you want to update and its value separated by ':'");
-		temp = sc.nextLine();
-		while (!temp.matches(".\\w+:\\w+")) {
-			System.err.println("Wrong format");
-			temp = sc.nextLine();
-		}
-		command = temp.split(":");
-		Document newD = new Document();
-		newD.put(command[0], command[1]);
-		Document updateQuery = new Document();
-		updateQuery.put("$set", newD);
+		int aux = 0;
 		try {
-			collection.updateOne(existing, updateQuery);
-		} catch (MongoWriteException e) {
-			System.err.println("That student doesn't exists.");
+			aux = Integer.parseInt(command[1]);
+		} catch (NumberFormatException e) {
+			Document d = new Document(command[0], command[1]);
+			Bson proj = Projections.fields(Projections.include(f), Projections.excludeId());
+			collection.find(d).projection(proj)
+					.forEach(t -> System.out.println(new JSONObject(t.toJson()).toString(4)));
 		}
+		System.err.println(aux);
+		Document d = new Document(command[0], aux);
+		Bson proj = Projections.fields(Projections.include(f), Projections.excludeId());
+		System.out.println(collection.countDocuments(d));
+		collection.find(d).projection(proj).forEach(t -> System.out.println(new JSONObject(t.toJson()).toString(4)));
 	}
 }

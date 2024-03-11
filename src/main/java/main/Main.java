@@ -18,13 +18,14 @@ public class Main {
 	static MongoCollection<Document> teachers;
 	static MongoCollection<Document> students;
 	static MongoCollection<Document> subjects;
+	static Scanner scanner = new Scanner(System.in);
 
 	public static void main(String[] args) {
 
 		MainMethods.initialize();
 		boolean out = false;
 		String command;
-		Scanner scanner = new Scanner(System.in);
+		
 
 		// TODO: Comprobar que todo esta bien definido (deberia)
 		while (!out) {
@@ -39,15 +40,15 @@ public class Main {
 				break;
 			case "sel":
 				if (command.contains("--a")) {
-					ah.selectStudent();
+					MainMethods.select("students");
 					break;
 				}
 				if (command.contains("--t")) {
-					th.selectTeacher();
+					MainMethods.select("teachers");
 					break;
 				}
 				if (command.contains("--s")) {
-					sh.selectSubject();
+					MainMethods.select("subjects");
 					break;
 				}
 				if (command.contains("--rel-ts")) {
@@ -56,6 +57,36 @@ public class Main {
 				}
 				if (command.contains("--rel-mg")) {
 					th.selectManagers();
+					break;
+				}
+				System.err.println("Wrong command. Please, try again.");
+				break;
+			case "update":
+				if (command.contains("--a")) {
+					MainMethods.update("students");
+					break;
+				}
+				if (command.contains("--t")) {
+					MainMethods.update("teachers");
+					break;
+				}
+				if (command.contains("--s")) {
+					MainMethods.update("subjects");
+					break;
+				}
+				System.err.println("Wrong command. Please, try again.");
+				break;
+			case "delete":
+				if (command.contains("--a")) {
+					MainMethods.delete("students");
+					break;
+				}
+				if (command.contains("--t")) {
+					MainMethods.delete("teachers");
+					break;
+				}
+				if (command.contains("--s")) {
+					MainMethods.delete("subjects");
 					break;
 				}
 				System.err.println("Wrong command. Please, try again.");
@@ -119,20 +150,7 @@ public class Main {
 				}
 				System.err.println("Wrong command. Please, try again.");
 				break;
-			case "update":
-				if (command.contains("--a ")) {
-					ah.updateStudent();
-					break;
-				}
-				if (command.contains("--t ")) {
-					th.updateTeacher();
-					break;
-				}
-				if (command.contains("--s ")) {
-					sh.updateSubject();
-					break;
-				}
-				break;
+			
 			case "assign":
 				MainMethods.assignStudent();
 				break;
