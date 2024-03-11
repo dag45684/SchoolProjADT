@@ -21,7 +21,7 @@ public class TeacherHandler {
 	}
 
 	void insertTeacher() {
-		System.out.println("Insert teacher id:");
+		System.out.println("Insert teacher id (TE000):");
 		String id = sc.nextLine();
 		while (!id.matches("TE\\d{3}")) {
 			System.err.println("Not valid ID, format should be: TE000");

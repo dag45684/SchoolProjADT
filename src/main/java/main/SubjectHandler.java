@@ -20,7 +20,7 @@ public class SubjectHandler {
 	}
 
 	void insertSubject() {
-		System.out.println("Insert subject id:");
+		System.out.println("Insert subject id (SB000):");
 		String id = sc.nextLine();
 		while (!id.matches("SB\\d{3}")) {
 			System.err.println("Not valid ID, format should be: SB000");

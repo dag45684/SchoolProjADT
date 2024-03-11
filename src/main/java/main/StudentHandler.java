@@ -20,7 +20,7 @@ public class StudentHandler {
 	}
 
 	void insertStudent() {
-		System.out.println("Insert student id:");
+		System.out.println("Insert student id (ST000):");
 		String id = sc.nextLine();
 		while (!id.matches("ST\\d{3}")) {
 			System.err.println("Not valid ID, format should be: ST000");

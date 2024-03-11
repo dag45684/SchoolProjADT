@@ -106,10 +106,10 @@ public class MainMethods {
 	public static void insertSubjectInto(String collectionName) {
 		MongoCollection<Document> collection = getCollection(collectionName);
 		System.out.println("To search for " + collectionName
-				+ ", write the field you are looking for and its value separated by ':'");
+				+ ", write the field you are looking for and its value separated by ':'.");
 		String temp = Main.scanner.nextLine();
 		while (!temp.matches(".\\w+:\\w+")) {
-			System.err.println("Wrong format");
+			System.err.println("Wrong format.");
 			temp = Main.scanner.nextLine();
 		}
 		String[] command = temp.split(":");
@@ -118,7 +118,7 @@ public class MainMethods {
 			System.err.println(collectionName + " with " + temp + " does not exist.");
 			return;
 		}
-		System.out.println("Introduce the subject ids you want to add, separated by ','");
+		System.out.println("Introduce the subject ids you want to add, separated by ','.");
 		temp = Main.scanner.nextLine();
 		while (!temp.matches("^(SB\\d{3})(,(SB\\d{3}))*$")) {
 			System.err.println("Wrong format");
@@ -147,7 +147,7 @@ public class MainMethods {
 		});
 		alreadyIn.forEach(t -> {
 			if (found.contains(t))
-				System.err.println(t + " is already a subject of this " + collectionName);
+				System.err.println(t + " is already a subject of this " + collectionName + ".");
 		});
 
 		ArrayList<String> subjectsToIntroduce = new ArrayList<>();
@@ -161,24 +161,27 @@ public class MainMethods {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void assignStudent() {
 		System.out
-				.println("To search for a teacher, write the field you are looking for and its value separated by ':'");
+				.println("To search for teachers, write the field you are looking for and its value separated by ':'.");
 		String temp = Main.scanner.nextLine();
 		while (!temp.matches(".\\w+:\\w+")) {
-			System.err.println("Wrong format");
+			System.err.println("Wrong format.");
 			temp = Main.scanner.nextLine();
 		}
 		String[] command = temp.split(":");
 		Document filtro = new Document(command[0], command[1]);
-		System.out.println("Introduce the student ids you want to add to the teacher, separated by ','");
+		if (Main.th.collection.countDocuments(filtro) == 0) {
+			System.err.println("Teacher with " + temp + " does not exist.");
+			return;
+		}
+		System.out.println("Introduce the student ids you want to add, separated by ','.");
 		temp = Main.scanner.nextLine();
-		// TODO: Comprobar que funcione
 		while (!temp.matches("^(ST\\d{3})(,(ST\\d{3}))*$")) {
-			System.err.println("Wrong format");
+			System.err.println("Wrong format.");
 			temp = Main.scanner.nextLine();
 		}
-
 		ArrayList<String> subs = new ArrayList<>();
 		if (temp.contains(",")) {
 			for (String s : temp.split(",")) {
@@ -187,12 +190,32 @@ public class MainMethods {
 		} else {
 			subs.add(temp);
 		}
+		ArrayList<String> found = new ArrayList<>();
+		subs.forEach(t -> {
+			Main.ah.collection.find(new Document("_id", t)).forEach(p -> found.add(p.getString("_id")));
+		});
+		subs.forEach(t -> {
+			if (!found.contains(t))
+				System.err.println(t + " does not exist.");
+		});
+		ArrayList<String> alreadyIn = new ArrayList<>();
+		Main.th.collection.find(filtro).forEach(t -> {
+			if (t.get("students") != null)
+				alreadyIn.addAll((ArrayList<String>) t.get("students"));
+		});
+		alreadyIn.forEach(t -> {
+			if (found.contains(t))
+				System.err.println(t + " is already a student of this teacher.");
+		});
 
-		ArrayList<String> rm = new ArrayList<>();
-		subs.forEach(t -> Main.teachers.find(new Document("asignaturas", t)).forEach(e -> rm.add(t)));
-		subs.removeAll(rm);
-		subs.forEach(e -> Main.students.find(new Document("_id", e))
-				.forEach(t -> Main.teachers.updateOne(filtro, new Document("$push", new Document("students", e)))));
+		ArrayList<String> studentsToIntroduce = new ArrayList<>();
+		found.forEach(t -> {
+			if (!alreadyIn.contains(t))
+				studentsToIntroduce.add(t);
+		});
+
+		studentsToIntroduce
+				.forEach(t -> Main.th.collection.updateOne(filtro, new Document("$push", new Document("students", t))));
 	}
 
 	@SuppressWarnings({ "unchecked" })

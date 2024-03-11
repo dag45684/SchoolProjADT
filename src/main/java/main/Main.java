@@ -25,9 +25,7 @@ public class Main {
 		MainMethods.initialize();
 		boolean out = false;
 		String command;
-		
 
-		// TODO: Comprobar que todo esta bien definido (deberia)
 		while (!out) {
 			System.out.println("SCHOOL PERSONNEL AND STUDENT MANAGEMENT:");
 			System.out.println("Write 'help' if needed or 'exit' to close the application.");
@@ -134,23 +132,23 @@ public class Main {
 				break;
 			case "sp":
 				if (command.contains("--a ")) {
-					command = command.substring(command.indexOf("--a ")+"--a ".length());
+					command = command.substring(command.indexOf("--a ") + "--a ".length());
 					ah.selectStudent(command);
 					break;
 				}
 				if (command.contains("--t ")) {
-					command = command.substring(command.indexOf("--t ")+"--t ".length());
+					command = command.substring(command.indexOf("--t ") + "--t ".length());
 					th.selectTeacher(command);
 					break;
 				}
 				if (command.contains("--s ")) {
-					command = command.substring(command.indexOf("--s ")+"--s ".length());
+					command = command.substring(command.indexOf("--s ") + "--s ".length());
 					sh.selectSubject(command);
 					break;
 				}
 				System.err.println("Wrong command. Please, try again.");
 				break;
-			
+
 			case "assign":
 				MainMethods.assignStudent();
 				break;
