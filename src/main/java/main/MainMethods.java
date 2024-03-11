@@ -1,17 +1,14 @@
 package main;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.List;
 
 import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.json.JSONObject;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.model.Projections;
 
 public class MainMethods {
 
@@ -105,10 +102,11 @@ public class MainMethods {
 		System.out.println();
 	}
 
-	// TODO: Comprobar que funcione
-	public static void insertSubjectIntoTeacher() {
-		System.out
-				.println("To search for a teacher, write the field you are looking for and its value separated by ':'");
+	@SuppressWarnings("unchecked")
+	public static void insertSubjectInto(String collectionName) {
+		MongoCollection<Document> collection = getCollection(collectionName);
+		System.out.println("To search for " + collectionName
+				+ ", write the field you are looking for and its value separated by ':'");
 		String temp = Main.scanner.nextLine();
 		while (!temp.matches(".\\w+:\\w+")) {
 			System.err.println("Wrong format");
@@ -116,14 +114,16 @@ public class MainMethods {
 		}
 		String[] command = temp.split(":");
 		Document filtro = new Document(command[0], command[1]);
-
+		if (collection.countDocuments(filtro) == 0) {
+			System.err.println(collectionName + " with " + temp + " does not exist.");
+			return;
+		}
 		System.out.println("Introduce the subject ids you want to add, separated by ','");
 		temp = Main.scanner.nextLine();
 		while (!temp.matches("^(SB\\d{3})(,(SB\\d{3}))*$")) {
 			System.err.println("Wrong format");
 			temp = Main.scanner.nextLine();
 		}
-
 		ArrayList<String> subs = new ArrayList<>();
 		if (temp.contains(",")) {
 			for (String s : temp.split(",")) {
@@ -132,50 +132,35 @@ public class MainMethods {
 		} else {
 			subs.add(temp);
 		}
+		ArrayList<String> found = new ArrayList<>();
+		subs.forEach(t -> {
+			Main.sh.collection.find(new Document("_id", t)).forEach(p -> found.add(p.getString("_id")));
+		});
+		subs.forEach(t -> {
+			if (!found.contains(t))
+				System.err.println(t + " does not exist.");
+		});
+		ArrayList<String> alreadyIn = new ArrayList<>();
+		collection.find(filtro).forEach(t -> {
+			if (t.get("subjects") != null)
+				alreadyIn.addAll((ArrayList<String>) t.get("subjects"));
+		});
+		alreadyIn.forEach(t -> {
+			if (found.contains(t))
+				System.err.println(t + " is already a subject of this " + collectionName);
+		});
 
-		ArrayList<String> rm = new ArrayList<>();
-		subs.forEach(t -> Main.teachers.find(new Document("asignaturas", t)).forEach(e -> rm.add(t)));
-		subs.removeAll(rm);
-		subs.forEach(e -> Main.subjects.find(new Document("_id", e))
-				.forEach(t -> Main.teachers.updateOne(filtro, new Document("$push", new Document("subjects", e)))));
+		ArrayList<String> subjectsToIntroduce = new ArrayList<>();
+		found.forEach(t -> {
+			if (!alreadyIn.contains(t))
+				subjectsToIntroduce.add(t);
+		});
+
+		subjectsToIntroduce
+				.forEach(t -> collection.updateOne(filtro, new Document("$push", new Document("subjects", t))));
+
 	}
 
-	// TODO: Comprobar que funcione
-	public static void insertSubjectIntoStudent() {
-		System.out
-				.println("To search for a student, write the field you are looking for and its value separated by ':'");
-		String temp = Main.scanner.nextLine();
-		while (!temp.matches(".\\w+:\\w+")) {
-			System.err.println("Wrong format");
-			temp = Main.scanner.nextLine();
-		}
-		String[] command = temp.split(":");
-		Document filtro = new Document(command[0], command[1]);
-
-		System.out.println("Introduce the subject ids you want to add, separated by ','");
-		temp = Main.scanner.nextLine();
-		while (!temp.matches("^(SB\\d{3})(,(SB\\d{3}))*$")) {
-			System.err.println("Wrong format");
-			temp = Main.scanner.nextLine();
-		}
-
-		ArrayList<String> subs = new ArrayList<>();
-		if (temp.contains(",")) {
-			for (String s : temp.split(",")) {
-				subs.add(s);
-			}
-		} else {
-			subs.add(temp);
-		}
-
-		ArrayList<String> rm = new ArrayList<>();
-		subs.forEach(t -> Main.students.find(new Document("asignaturas", t)).forEach(e -> rm.add(t)));
-		subs.removeAll(rm);
-		subs.forEach(e -> Main.subjects.find(new Document("_id", e))
-				.forEach(t -> Main.students.updateOne(filtro, new Document("$push", new Document("subjects", e)))));
-	}
-
-	// TODO: Comprobar que funcione
 	public static void assignStudent() {
 		System.out
 				.println("To search for a teacher, write the field you are looking for and its value separated by ':'");
@@ -210,7 +195,7 @@ public class MainMethods {
 				.forEach(t -> Main.teachers.updateOne(filtro, new Document("$push", new Document("students", e)))));
 	}
 
-	@SuppressWarnings("unlikely-arg-type")
+	@SuppressWarnings({ "unchecked" })
 	public static void findCommonSubjects() {
 		System.out
 				.println("To search for a teacher, write the field you are looking for and its value separated by ':'");
@@ -220,7 +205,21 @@ public class MainMethods {
 			temp = Main.scanner.nextLine();
 		}
 		String[] command = temp.split(":");
-		Document tea = new Document(command[0], command[1]);
+		int aux = 0;
+		boolean exception = false;
+		Document tea = new Document();
+		try {
+			aux = Integer.parseInt(command[1]);
+		} catch (NumberFormatException e) {
+			exception = true;
+			tea.put(command[0], command[1]);
+		}
+		if (!exception)
+			tea.put(command[0], aux);
+		if (Main.th.collection.countDocuments(tea) == 0) {
+			System.err.println("Teacher with " + temp + " does not exist.");
+			return;
+		}
 		System.out
 				.println("To search for a student, write the field you are looking for and its value separated by ':'");
 		temp = Main.scanner.nextLine();
@@ -229,17 +228,40 @@ public class MainMethods {
 			temp = Main.scanner.nextLine();
 		}
 		command = temp.split(":");
-		Document stu = new Document(command[0], command[1]);
+		Document stu = new Document();
+		exception = false;
+		try {
+			aux = Integer.parseInt(command[1]);
+		} catch (NumberFormatException e) {
+			exception = true;
+			stu.put(command[0], command[1]);
+		}
+		if (!exception)
+			stu.put(command[0], aux);
+		if (Main.ah.collection.countDocuments(stu) == 0) {
+			System.err.println("Student with " + temp + " does not exist.");
+			return;
+		}
+		List<String> subjTeacher = new ArrayList<String>();
+		List<String> subjStudent = new ArrayList<String>();
+		List<String> subjCommon = new ArrayList<String>();
+		Main.th.collection.find(tea).forEach(t -> subjTeacher.addAll((ArrayList<String>) t.get("subjects")));
+		Main.ah.collection.find(stu).forEach(t -> subjStudent.addAll((ArrayList<String>) t.get("subjects")));
+		subjTeacher.forEach(t -> {
+			if (subjStudent.contains(t))
+				subjCommon.add(t);
+		});
+		subjCommon.forEach(System.out::println);
 
 		// TODO: Comprobar que funcione
-		Bson proj = Projections.fields(Projections.include("subjects"), Projections.excludeId());
-		ArrayList<String> sub = new ArrayList<>();
-		Main.th.collection.find(tea).projection(proj)
-				.forEach(e -> Arrays.asList(e.get("subjects")).forEach(t -> sub.add((String) t)));
-		Main.ah.collection.find(stu).projection(proj).forEach(e -> {
-			if (sub.contains(e))
-				System.out.println(e);
-		});
+//		Bson proj = Projections.fields(Projections.include("subjects"), Projections.excludeId());
+//		ArrayList<String> sub = new ArrayList<>();
+//		Main.th.collection.find(tea).projection(proj)
+//				.forEach(e -> Arrays.asList(e.get("subjects")).forEach(t -> sub.add((String) t)));
+//		Main.ah.collection.find(stu).projection(proj).forEach(e -> {
+//			if (sub.contains(e))
+//				System.out.println(e);
+//		});
 	}
 
 	public static void select(String collectionName) {

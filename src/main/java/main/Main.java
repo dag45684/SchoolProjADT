@@ -123,11 +123,11 @@ public class Main {
 				break;
 			case "add":
 				if (command.contains("--st")) {
-					MainMethods.insertSubjectIntoTeacher();
+					MainMethods.insertSubjectInto("teachers");
 					break;
 				}
 				if (command.contains("--sa")) {
-					MainMethods.insertSubjectIntoStudent();
+					MainMethods.insertSubjectInto("students");
 					break;
 				}
 				System.err.println("Wrong command. Please, try again.");
