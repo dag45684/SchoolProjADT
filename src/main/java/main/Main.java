@@ -20,6 +20,13 @@ public class Main {
 	static MongoCollection<Document> subjects;
 	static Scanner scanner = new Scanner(System.in);
 
+	
+	/**
+	 * @author Abel Alonso
+	 * @author Carlos Manso
+	 * 
+	 * This project was realised entirely by both of us for ADT subject final hand in.
+	 */
 	public static void main(String[] args) {
 
 		MainMethods.initialize();
